@@ -1,0 +1,118 @@
+---
+title: "Q4"
+author: "Student"
+date: "05/12/2022"
+output: html_document
+---
+##Question 04: Run a statistical test on the Palmer Penguins dataset and produce a figure to explain it.
+
+I want to investigate whether island has an effect on the body mass of Adelie penguins.
+
+There are three islands;	
+Torgersen 	
+Biscoe and 	
+Dream
+
+So I will need to perform a one-way-ANOVA 
+
+```{r}
+# Set working directory
+setwd("C:/Users/user/Desktop/Computing MTY3/PenguinsAssignment") 
+
+# Load libraries - from Libraries.R in functions folder in working directory
+source("C:/Users/user/Desktop/Computing MTY3/PenguinsAssignment/Functions/Libraries.R")
+
+# Load data
+read.csv("RawData/penguins_raw.csv")
+
+# Clean data
+source("C:/Users/user/Desktop/Computing MTY3/PenguinsAssignment/Functions/Cleaning.r")
+penguins_clean <- cleaning(penguins_raw)
+# Cleaning function is saved in a separate r script, inside Functions folder
+
+# Save clean data
+write.csv(penguins_clean, "C:/Users/user/Desktop/Computing MTY3/PenguinsAssignment/CleanData/clean_data.csv")
+
+# Extract data, remove NAs
+source("C:/Users/user/Desktop/Computing MTY3/PenguinsAssignment/Functions/Cleaning.r")
+adelie_data <- subset_adelies(penguins_clean)
+summary(adelie_data)
+
+# Assumptions of ANOVA = independent data points, homogeneity of variances, normal distribution
+
+# Equality of Variances - Levene test
+library(car)
+leveneTest(body_mass_g ~  island, data = adelie_data)
+# non significant p value (p>0.05) means our variances are roughlt equal
+
+# Normal Distribution - as the data set contains 151 samples (n>30), I will assume normality due to the central limit theorem
+
+# ANOVA
+penguins_anova <- aov(body_mass_g ~ island,
+  data = adelie_data
+)
+summary(penguins_anova)
+penguins_anova
+hist(penguins_anova$residuals)
+```
+^
+Here I took a subset of my data that only contained Adelie penguins, and the columns of body mass and island
+
+I assumed normality because there was a big sample size. Then I did a Levene test which showed body mass had roughly have equal variances between islands. 
+
+Then I was able to perform a one-way ANOVA to see the effect of island on body mass.
+
+The resulting p-value was 0.968, so not a significant result. Body mass didn't differ significantly between islands.
+
+
+# Making a figure
+```{r}
+# Set working directory
+setwd("C:/Users/user/Desktop/Computing MTY3/PenguinsAssignment") 
+
+# Load libraries - from Libraries.R in functions folder in working directory
+source("C:/Users/user/Desktop/Computing MTY3/PenguinsAssignment/Functions/Libraries.R")
+
+# Load data
+read.csv("RawData/penguins_raw.csv")
+
+# Clean data
+source("C:/Users/user/Desktop/Computing MTY3/PenguinsAssignment/Functions/Cleaning.r")
+penguins_clean <- cleaning(penguins_raw)
+# Cleaning function is saved in a separate r script, inside Functions folder
+
+# Save clean data
+write.csv(penguins_clean, "C:/Users/user/Desktop/Computing MTY3/PenguinsAssignment/CleanData/clean_data.csv")
+
+# Extract data, remove NAs
+source("C:/Users/user/Desktop/Computing MTY3/PenguinsAssignment/Functions/Cleaning.r")
+adelie_data <- subset_adelies(penguins_clean)
+summary(adelie_data)
+
+# Figure
+library(ggplot2)
+adelies_figure <- ggplot(adelie_data) +
+  aes(x = island, y = body_mass_g, color = island) +
+   geom_boxplot(aes(colour=island), width = 0.4) +
+  geom_jitter(aes(color = island), alpha = 0.3, show.legend = FALSE, position = position_jitter(width = 0.2, seed = 0)) +
+  theme(legend.position = "none") +
+  ggtitle("Body Mass in Adelies Does Not Vary Across Three Islands") +
+  theme(plot.title = element_text(size=10)) +
+  labs(x="Island", y= "Body Mass (g)") +
+  theme_bw()
+ 
+
+
+# Save figure
+library(ragg)
+agg_png("adelie_penguins.png", 
+        width = 800, height = 600, units = "px",
+        res = 300,
+        scaling = 0.5)
+adelies_figure
+dev.off()
+
+adelies_figure
+
+
+```
