@@ -1,0 +1,280 @@
+---
+title: "Penguins Assessment"
+author: "Student"
+date: "23/11/2022"
+output: html_document
+---
+
+## Question 01: What is the reproducibility crisis in science and should we care?
+300-500 words
+
+
+
+Reproducible science is where you can repeat the same experiment, using the exact same methods and analyses to get the exact same results. Ideally, all science should be this way. Yet more than 50% of 1576 scientists who responded to a survey by nature couldn't even reproduce their own experiments, and more than 70% couldn't reproduce those of others! (Baker, 2016. Nature.)
+
+The lack of transparency in scientific publications means we cannot be sure of the validity of results. It goes against the idea of Open Science which aims to make science easily accessible to the public. And prevents other researchers expanding on existing research or doing meta-analyses. It also makes things harder for the original researchers if they need to change part of their analysis or reuse the data for other purposes. Researchers should want to publish reproducible science because they are likely to receive more citations and future collaborators, (McKiernan et al., 2016. Biochemistry and Chemical Biology).
+
+In addition the scarcity of reproducible publications, there also appears to be a lack of interest in reproducing other people's data. This is largely the result of of bias in the field. Journals are more likely to publish the results of new experiments rather than reproductions of old news. Similarly with increasing competition for grants, scientists need to push the fact that their work is new and ground breaking. Often, the scientific world is willing to accept the results of studies without the need to reproduce them. Yet, reproducibility is key to ensuring that these outcomes are true. 
+
+To fix this crisis and encourage open science, those surveyed at Nature emphasized the importance of better teaching and mentoring as well as communication within and between labs. Often the writers of journals do not fully understand how the results were obtained, so it comes as no surprise they cannot explain the methods and code clearly in their publications. 
+We can also incentivise reproducible science with rewards. The journal Pshychological Science has introduced a badge for good reproducible research, and the centre for open science has a $1000 reward for publications which reproduce the work of others. 
+
+
+
+## Question 02: Create a figure using the Palmer Penguin dataset that is correct but badly communicates the data.
+Focus on visual elements rather than writing misleading text on it. Provide the figure and explain your choices. 100-200 words
+
+```{r, pseudocode, echo=FALSE}
+
+# Load packages
+library(palmerpenguins)
+library(ggplot2)
+library(janitor)
+library(dplyr)
+
+# Set working directory
+setwd("C:/Users/user/Desktop/Computing MTY3/PenguinsAssignment") 
+
+# Save raw data
+write.csv(penguins_raw, "RawData/penguins_raw.csv") 
+#inside 'RawData' folder in the working directory
+
+# Cleaning the data
+source("C:/Users/user/Desktop/Computing MTY3/PenguinsAssignment/Functions/Cleaning.r")
+penguins_clean <- cleaning(penguins_raw)
+# Cleaning function is saved in a separate r script, inside Functions folder
+
+# Save clean data
+write.csv(penguins_clean, "C:/Users/user/Desktop/Computing MTY3/PenguinsAssignment/CleanData/clean_data.csv")
+
+
+
+```
+## Creating a Figure
+
+```{r, pseudocode, echo = FALSE}
+# I am going to make a box plot of body masses for the two sexes
+
+# Further cleaning...
+
+# I removed NAs from the sex and body mass columns
+# Then sub-setted the data to just contain these two columns 
+
+source("Functions/Cleaning.R")
+sex_bodymass_data <- subset_bodymass(penguins_clean)
+# The code for this is saved in the cleaning script in the functions folder
+
+# Save 
+write.csv(sex_bodymass_data, "CleanData/ sex_bodymass_data.csv") 
+
+# Making the figure
+bodymass_boxplot <- ggplot(data = sex_bodymass_data, 
+                          aes(x = sex, 
+                              y = body_mass_g)) +
+                          geom_boxplot(aes(color = sex), show.legend = FALSE)
+bodymass_boxplot
+
+
+# Making it ugly
+bad_boxplot <- ggplot(data = sex_bodymass_data, 
+                          aes(x = sex, 
+                              y = body_mass_g)) +
+                          geom_boxplot(aes(color = sex, fill = sex), show.legend = FALSE) +
+  geom_point(aes(size=10)) +
+  scale_color_manual(values = c("green", "red")) +
+  scale_fill_manual(values = c("red", "green"))
+  
+# Saving the 'bad boxplot' figure
+library(ragg)
+agg_png("Figures/bad_boxplot.png", 
+        width = 800, height = 600, units = "px",
+        res = 300,
+        scaling = 0.5)
+bad_boxplot
+dev.off()
+bad_boxplot
+
+```
+This box plot has two big problems.
+
+1. Colours:
+
+Though filling in the two boxes in separate colours is good practice, I have deliberately picked bad colours. The clash of red and green not only is hard on the eyes but makes viewing the mean difficult for people who are colourblind.
+
+2. Data points:
+
+The data points have been added using just geom_point() without using jitter. This means they all fall on the same position on the x-axis for each box and so it is impossible to pick out individual points. I have made the points extra large to emphasize this!
+
+
+It would also be a good idea to re-label the x and y axes and to add a legend explaining where this data has come from and what it shows!
+
+
+
+##Question 03: Discuss how colour choice is important for communication in science figures and what considerations should be made
+300 - 500 words
+
+When creating figures to communicate scientific work, researchers often overlook their choice of colour palette, viewing the colours as arbitrary. Yet different colour palettes can completely change how viewers perceive the data. 
+
+For starters, certain colours are brighter than others and distract the eye, emphasising certain elements. For instance, in the Rainbow colour palette, the default in a number of computer programmes, the yellow and blue, neither of which are at the centre or ends of the spectrum, are particularly bright. The human brain also has differing sensitivities to certain colours. 2/3 of the cones involved in colour perception are dedicated to warm colours; reds, yellows and oranges and so we can pick out more details from these colours than we can for greens and blues. 
+
+Colour blindness:
+
+All of the above applies to people who have a fully working set of cones. Yet 0.5% of women and a whopping 8% of men are colour-deficient. This means that at least one kind of cone is altered, faulty or absent. 
+The most common is Deuteralonomy, which affects the M-cone and causes reduced sensitivity to green light. Less common are Protanomoly which affects the L-cone and results in reduced sensitivity to red light and Tritanomoly which affects the S-cone and results in reduced sensitivity to blue light. 
+Both Deuteralonomy and Protanomoly can cause difficulty distinguishing between reds and greens and browns and oranges. People with Tritanomoly, which is much rarer, have difficulty identifying differences between blue and yellow, violet and red and blue and green.
+1 in 33,000 have monochromatic vision and can see no colour at all, only greyscale. (https://www.colourblindawareness.org/)
+
+Choosing a colour palette:
+
+When choosing a colour palette for a figure there are a few things to consider. First, you should make sure that your colour palette works for those with colour-deficient-vision, you can check this online using a colour-blidness simulator. Most importantly, because red-green colour blindness is most common, you should ensure your palette does not include red and green at the same luminosity. Secondly you want a palette in which lightness increases or decreases uniformly in the order of the colour gradient. If this is the case, the palette should remain readable even if the paper is printed in black and white. Thirdly, you might decide to use a diverging, multisequential or cyclic colour map to match your data. For instance, you might want to use a diverging colour scale for data that diverge from zero, or a cyclic colour map to represent orientation. These types of colour map can be particularly meaningful at conveying more complex data. (Crameri, Shephard and Heron, 2020. Nature communications.)
+
+
+##Question 04: Run a statistical test on the Palmer Penguins dataset and produce a figure to explain it.
+
+https://github.com/Diplodocus123/PalmerPenguinAssignment/blob/main/Q4%20script.Rmd
+
+I want to investigate whether island has an effect on the body mass of Adelie penguins.
+
+There are three islands;	
+Torgersen 	
+Biscoe and 	
+Dream
+
+So I will need to perform a one-way-ANOVA 
+
+```{r}
+
+## Reducing the data set
+
+#Load libraries - from Libraries.R in functions folder in working directory
+source("Functions/Libraries.R")
+
+# Load data
+read.csv("CleanData/clean_data.csv")
+
+
+# Extract relevant data, remove NAs - from Cleaning.R in functions folder
+source("Functions/Cleaning.r")
+adelie_data <- subset_adelies(penguins_clean)
+summary(adelie_data)
+
+
+# Save reduced dataset
+write.csv(adelie_data, "CleanData/adelie_data.csv")
+
+
+
+## Checking Assumptions of ANOVA
+
+#-independent data points - part of experimental design
+#-homogeneity of variances
+#-normal distribution
+
+# Equality of Variances - Levene test
+library(car)
+leveneTest(body_mass_g ~  island, data = adelie_data)
+# non significant p value (p>0.05) means our variances are roughly equal
+
+# Normal Distribution - as the data set contains 151 samples (n>30), I will assume normality due to the central limit theorem
+
+#...but just to be sure...
+hist(penguins_anova$residuals) # appears normal :)
+
+
+
+
+## ANOVA Test
+penguins_anova <- aov(body_mass_g ~ island,
+  data = adelie_data
+)
+
+summary(penguins_anova)
+
+
+```
+
+^
+Here I took a subset of my data that only contained Adelie penguins, and the columns of body mass and island
+
+I assumed normality because there was a big sample size. Then I did a Levene test which showed body mass had roughly have equal variances between islands. 
+
+Then I was able to perform a one-way ANOVA to see the effect of island on body mass.
+
+The resulting p-value was 0.968, so not a significant result. Body mass didn't differ significantly between islands.
+
+
+# Making a figure
+```{r}
+
+# Load libraries - from Libraries.R in functions folder in working directory
+source("Functions/Libraries.R")
+
+# Load data
+read.csv("CleanData/adelie_data.csv")
+
+# Figure - scatter plot
+library(ggplot2)
+adelies_figure <- ggplot(adelie_data) +
+  aes(x = island, y = body_mass_g, color = island) +
+  geom_jitter(aes(colour=island)) +
+  theme(legend.position = "none") +
+  ggtitle("Body Mass in Adelies Does Not Vary Across Three Islands") +
+  theme(plot.title = element_text(size=10)) +
+  labs(x="Island", y= "Body Mass (g)") +
+  theme_bw()
+ 
+
+
+# Save figure
+library(ragg)
+agg_png("Figures/adelie_penguins.png", 
+        width = 800, height = 600, units = "px",
+        res = 300,
+        scaling = 0.5)
+adelies_figure
+dev.off()
+
+adelies_figure
+
+
+```
+## Question 05: Download someone else's example from Question 04.
+
+https://github.com/Calathea007/penguins/blob/main/penguin_assignment.rmd
+
+
+# 1)	What elements of your partner's code helped you to understand their data pipeline?
+
+It was easy to understand the data pipeline because each bit of code had a source URL and the student explained what each bit of code was doing with comments and headings.
+
+# 2)	Did you try to run it? Did it work?
+
+Yes. 
+I couldn’t open all the packages because my computer doesn’t have svglite downloaded – but easy to do!
+Managed to head the data set and cleaned dataset
+Ran the regression and got the summary table
+Ran the plotting code and got a nice regression line
+
+# 3)	What suggestions would you make for improving their code to make it more understandable or reproducible, and why?
+
+Maybe go into more detail in the comments about what exactly the cleaning function does e.g., removes NAs
+This means that others know exactly what manipulations you are doing at each stage and where to find the code for each step. 
+
+# 4)	If you needed to alter your partner's figure using their code, do you think that would be easy or difficult, and why?
+
+This would be very straight forward. I could see that the code to make the figure is under the plotting file in the functions folder. The code was nicely laid out and easy to follow.
+To keep a record of changes I could save the edited version in the same folder then source the new code to the main markdown document.
+
+# 5)	Reflect on your own code and figure from Question 4 with reference to your partner's work and also their review of yours.
+
+#a.	What improvements did they suggest, and do you agree?
+
+Unfortunately the code did not work for my partner. This was because I originally had set the working directory to a folder in my computer. To fix this problem I have removed this line of code and changed the source commands to only reference files inside the penguins assignment repository in github. 
+
+My partner also suggested that I save the code for plotting my figure in a separate file which means it would be easier to locate when making changes. I totally agree!
+
+#b.	What did you learn about writing code for other people?
+
+I have learned that saving bits of code in different files is very useful and makes things easy to navigate, however it is important to ensure that the main code can source these files on any computer. The best way to do this would be to create subfolders which can be uploaded to github (but remove setwd() first!)
+
+I also think having big headers and annotations throughout is extrememly important in making code easier to read for others... and for yourself!
