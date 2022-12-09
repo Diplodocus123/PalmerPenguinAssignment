@@ -2,7 +2,9 @@
 title: "Penguins Assessment"
 author: "Student"
 date: "23/11/2022"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ## Question 01: What is the reproducibility crisis in science and should we care?
@@ -24,7 +26,8 @@ To fix this crisis and encourage open science, those surveyed at Nature emphasiz
 ## Question 02: Create a figure using the Palmer Penguin dataset that is correct but badly communicates the data.
 Focus on visual elements rather than writing misleading text on it. Provide the figure and explain your choices. 100-200 words
 
-```{r, pseudocode, echo=FALSE}
+```{r, echo=FALSE}
+#Loading and cleaning dataset...
 
 # Load packages
 library(palmerpenguins)
@@ -47,10 +50,6 @@ write.csv(penguins_clean, "CleanData/clean_data.csv")
 
 
 
-```
-## Creating a Figure
-
-```{r, pseudocode, echo = FALSE}
 # I am going to make a box plot of body masses for the two sexes
 
 # Further cleaning...
@@ -65,15 +64,8 @@ sex_bodymass_data <- subset_bodymass(penguins_clean)
 # Save 
 write.csv(sex_bodymass_data, "CleanData/ sex_bodymass_data.csv") 
 
-# Making the figure
-bodymass_boxplot <- ggplot(data = sex_bodymass_data, 
-                          aes(x = sex, 
-                              y = body_mass_g)) +
-                          geom_boxplot(aes(color = sex), show.legend = FALSE)
-bodymass_boxplot
 
-
-# Making it ugly
+# Making an ugly figure
 bad_boxplot <- ggplot(data = sex_bodymass_data, 
                           aes(x = sex, 
                               y = body_mass_g)) +
@@ -155,6 +147,8 @@ So I will need to perform a one-way-ANOVA
 
 ## Reducing the data set
 
+#Set working directory to Diplodocus123/PalmerPenguinAssignment
+
 #Load libraries - from Libraries.R in functions folder in working directory
 source("Functions/Libraries.R")
 
@@ -205,7 +199,7 @@ summary(penguins_anova)
 ^
 Here I took a subset of my data that only contained Adelie penguins, and the columns of body mass and island
 
-I assumed normality because there was a big sample size. Then I did a Levene test which showed body mass had roughly have equal variances between islands. 
+I assumed normality because there was a big sample size. Then I did a Levene test which showed body mass had roughly have equal variances between islands, P-value was 0.896, (>> 0.05). 
 
 Then I was able to perform a one-way ANOVA to see the effect of island on body mass.
 
