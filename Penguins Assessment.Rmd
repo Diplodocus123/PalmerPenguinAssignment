@@ -10,14 +10,14 @@ output: html_document
 
 
 
-Reproducible science is where you can repeat the same experiment, using the exact same methods and analyses to get the exact same results. Ideally, all science should be this way. Yet more than 50% of 1576 scientists who responded to a survey by nature couldn't even reproduce their own experiments, and more than 70% couldn't reproduce those of others! (Baker, 2016. Nature.)
+Reproducible science is where you can repeat the same experiment, using the exact same methods and analyses to get the same results. Ideally, all science should be this way. Yet more than 50% of 1576 scientists who responded to a survey from Nature failed to even reproduce their own experiments, and more than 70% failed to reproduce those of others! (Baker, 2016. Nature).
 
-The lack of transparency in scientific publications means we cannot be sure of the validity of results. It goes against the idea of Open Science which aims to make science easily accessible to the public. And prevents other researchers expanding on existing research or doing meta-analyses. It also makes things harder for the original researchers if they need to change part of their analysis or reuse the data for other purposes. Researchers should want to publish reproducible science because they are likely to receive more citations and future collaborators, (McKiernan et al., 2016. Biochemistry and Chemical Biology).
+The lack of transparency in scientific publications means we cannot tell apart 'lucky' positive results from sound scientific method. This goes against the idea of Open Science which aims to make science easily accessible and understandable to the public. And makes it very difficult for other researchers to expand on existing research or do meta-analyses, and even for the original researchers if they need to change part of their analysis or reuse the data for other purposes. 
 
-In addition the scarcity of reproducible publications, there also appears to be a lack of interest in reproducing other people's data. This is largely the result of of bias in the field. Journals are more likely to publish the results of new experiments rather than reproductions of old news. Similarly with increasing competition for grants, scientists need to push the fact that their work is new and ground breaking. Often, the scientific world is willing to accept the results of studies without the need to reproduce them. Yet, reproducibility is key to ensuring that these outcomes are true. 
+In addition the scarcity of reproducible publications, there also appears to be a lack of interest in reproducing other people's data. This is the result of of bias in the field: Journals are more likely to publish the results of new experiments rather than reproductions of old news. Similarly with increasing competition for grants, scientists need to push the fact that their work is new and ground breaking. Often, the scientific world is willing to accept the results of studies without the need to reproduce them. Yet, reproducibility is key to building up a solid base of knowledge to expand from. A lot of the bad press around open science are misconceptions. Publishing reproducible science in fact makes researchers more likely to receive citations and future collaborators, (McKiernan et al., 2016. Biochemistry and Chemical Biology).
 
-To fix this crisis and encourage open science, those surveyed at Nature emphasized the importance of better teaching and mentoring as well as communication within and between labs. Often the writers of journals do not fully understand how the results were obtained, so it comes as no surprise they cannot explain the methods and code clearly in their publications. 
-We can also incentivise reproducible science with rewards. The journal Pshychological Science has introduced a badge for good reproducible research, and the centre for open science has a $1000 reward for publications which reproduce the work of others. 
+To fix this crisis and encourage open science, those surveyed at Nature emphasized the importance of better teaching and mentoring as well as communication within and between labs. Often the writers of journals do not fully understand how the results were obtained, so it comes as no surprise they cannot explain the methods and code clearly in their publications. We can also incentivise reproducible science with rewards. For example, The journal Pshychological Science has introduced a badge for good reproducible research, and the centre for open science has a $1000 reward for publications which reproduce the work of others. 
+
 
 
 
@@ -32,20 +32,18 @@ library(ggplot2)
 library(janitor)
 library(dplyr)
 
-# Set working directory
-setwd("C:/Users/user/Desktop/Computing MTY3/PenguinsAssignment") 
 
 # Save raw data
 write.csv(penguins_raw, "RawData/penguins_raw.csv") 
 #inside 'RawData' folder in the working directory
 
 # Cleaning the data
-source("C:/Users/user/Desktop/Computing MTY3/PenguinsAssignment/Functions/Cleaning.r")
+source("Functions/Cleaning.r")
 penguins_clean <- cleaning(penguins_raw)
 # Cleaning function is saved in a separate r script, inside Functions folder
 
 # Save clean data
-write.csv(penguins_clean, "C:/Users/user/Desktop/Computing MTY3/PenguinsAssignment/CleanData/clean_data.csv")
+write.csv(penguins_clean, "CleanData/clean_data.csv")
 
 
 
@@ -115,18 +113,29 @@ It would also be a good idea to re-label the x and y axes and to add a legend ex
 
 When creating figures to communicate scientific work, researchers often overlook their choice of colour palette, viewing the colours as arbitrary. Yet different colour palettes can completely change how viewers perceive the data. 
 
-For starters, certain colours are brighter than others and distract the eye, emphasising certain elements. For instance, in the Rainbow colour palette, the default in a number of computer programmes, the yellow and blue, neither of which are at the centre or ends of the spectrum, are particularly bright. The human brain also has differing sensitivities to certain colours. 2/3 of the cones involved in colour perception are dedicated to warm colours; reds, yellows and oranges and so we can pick out more details from these colours than we can for greens and blues. 
+For starters, certain colours are brighter than others and distract the eye, emphasising certain elements. For instance, in Rainbow, the default in a number of computer programmes, the yellow and blue are very bright, yet neither of which are at the centre or ends of the spectrum, so this brightness gives no additional information. The human brain also has differing sensitivities to certain colours. 2/3 of the cones involved in colour perception are dedicated to warm colours; reds, yellows and oranges and so we can pick out more details from these colours than we can for greens and blues, meaning figures with a warm colour scheme are more informative to viewers. 
 
 Colour blindness:
 
-All of the above applies to people who have a fully working set of cones. Yet 0.5% of women and a whopping 8% of men are colour-deficient. This means that at least one kind of cone is altered, faulty or absent. 
-The most common is Deuteralonomy, which affects the M-cone and causes reduced sensitivity to green light. Less common are Protanomoly which affects the L-cone and results in reduced sensitivity to red light and Tritanomoly which affects the S-cone and results in reduced sensitivity to blue light. 
-Both Deuteralonomy and Protanomoly can cause difficulty distinguishing between reds and greens and browns and oranges. People with Tritanomoly, which is much rarer, have difficulty identifying differences between blue and yellow, violet and red and blue and green.
+All of the above applies to people who have a fully working set of cones. Yet 0.5% of women and 8% of men are colour-deficient. This means that at least one kind of cone is altered, faulty or absent. 
+
+The most common is Deuteralonomy, which affects the M-cone and causes reduced sensitivity to green light. 
+
+Less common are Protanomoly which affects the L-cone and results in reduced sensitivity to red light and Tritanomoly which affects the S-cone and results in reduced sensitivity to blue light. 
+
+Both Deuteralonomy and Protanomoly can cause difficulty distinguishing between reds and greens and browns and oranges. 
+
+People with Tritanomoly, which is much rarer, have difficulty identifying differences between blue and yellow, violet and red and blue and green.
+
 1 in 33,000 have monochromatic vision and can see no colour at all, only greyscale. (https://www.colourblindawareness.org/)
+
 
 Choosing a colour palette:
 
-When choosing a colour palette for a figure there are a few things to consider. First, you should make sure that your colour palette works for those with colour-deficient-vision, you can check this online using a colour-blidness simulator. Most importantly, because red-green colour blindness is most common, you should ensure your palette does not include red and green at the same luminosity. Secondly you want a palette in which lightness increases or decreases uniformly in the order of the colour gradient. If this is the case, the palette should remain readable even if the paper is printed in black and white. Thirdly, you might decide to use a diverging, multisequential or cyclic colour map to match your data. For instance, you might want to use a diverging colour scale for data that diverge from zero, or a cyclic colour map to represent orientation. These types of colour map can be particularly meaningful at conveying more complex data. (Crameri, Shephard and Heron, 2020. Nature communications.)
+When choosing a colour palette for a figure there are a few things to consider. First, you should make sure that your colour palette works for those with colour-deficient vision. You can check this online using a colour-blidness simulator. Most importantly, because red-green colour blindness is most common, you should ensure your palette does not include red and green at the same luminosity. Secondly you want a palette in which lightness increases or decreases uniformly in the order of the colour gradient. This will ensure that brightness conveys information from your figure and is not distracting. In this case, the palette should remain readable even if the paper is printed in black and white. Thirdly, you might decide to use a diverging, multisequential or cyclic colour map to match your data. For instance, you might want to use a diverging colour scale for data that diverge from zero, or a cyclic colour map to represent orientation. These types of colour map can be particularly meaningful at conveying more complex data.
+
+(Crameri, Shephard and Heron, 2020. Nature communications.)
+
 
 
 ##Question 04: Run a statistical test on the Palmer Penguins dataset and produce a figure to explain it.
@@ -269,7 +278,7 @@ To keep a record of changes I could save the edited version in the same folder t
 
 #a.	What improvements did they suggest, and do you agree?
 
-Unfortunately the code did not work for my partner. This was because I originally had set the working directory to a folder in my computer. To fix this problem I have removed this line of code and changed the source commands to only reference files inside the penguins assignment repository in github. 
+Unfortunately the code did not work for my partner. This was because I originally had set the working directory to a folder in my computer. I have edited my main script to removed this line of code and change the source commands to reference files inside the penguins assignment repository in github. 
 
 My partner also suggested that I save the code for plotting my figure in a separate file which means it would be easier to locate when making changes. I totally agree!
 
@@ -277,4 +286,4 @@ My partner also suggested that I save the code for plotting my figure in a separ
 
 I have learned that saving bits of code in different files is very useful and makes things easy to navigate, however it is important to ensure that the main code can source these files on any computer. The best way to do this would be to create subfolders which can be uploaded to github (but remove setwd() first!)
 
-I also think having big headers and annotations throughout is extrememly important in making code easier to read for others... and for yourself!
+I also think having big headers and annotations throughout is extremely important in making code easier to read for others... and for yourself!
